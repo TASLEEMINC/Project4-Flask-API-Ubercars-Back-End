@@ -8,6 +8,8 @@ flask = "*"
 psycopg2-binary = "*"
 python-dotenv = "*"
 flask-cors = "*"
+pyjwt = "*"
+bcrypt = "*"
 
 [dev-packages]
 
