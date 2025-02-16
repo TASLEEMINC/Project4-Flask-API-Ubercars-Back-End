@@ -11,13 +11,21 @@ load_dotenv()
 
 app = Flask(__name__)
 CORS(app)
+
 def get_db_connection():
-    connection = psycopg2.connect(
-        host='localhost',
-        database='ubercars_db',
-        user=os.environ['POSTGRES_USER'],
-        password=os.environ['POSTGRES_PASSWORD']
-    )
+    if 'ON_HEROKU' in os.environ:
+        connection = psycopg2.connect(
+            os.getenv('DATABASE_URL'), 
+            sslmode='require'
+        )
+
+    else:
+        connection = psycopg2.connect(
+            host='localhost',
+            database='ubercars_db',
+            user=os.environ['POSTGRES_USER'],
+            password=os.environ['POSTGRES_PASSWORD']
+        )
     return connection
 
 @app.route('/')
@@ -199,4 +207,5 @@ def users_id(user_id):
         return jsonify({"err": "User not found"}), 404
     return jsonify(user), 200
 
-app.run()
+if __name__ == '__main__':
+    app.run()
